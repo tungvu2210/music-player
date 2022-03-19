@@ -1,4 +1,12 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, {
+  createContext,
+  Dispatch,
+  SetStateAction,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import "./App.css";
 import FilterGroup from "./components/FilterGroup";
 import SongList from "./components/SongList";
@@ -11,12 +19,24 @@ export interface MusicCategory {
   title: string;
 }
 
+interface SongContextInterface {
+  changeSongIndex(newSongIndex: number): void;
+  song: SongInterface;
+  isPlaying: boolean;
+  setIsPlaying: Dispatch<SetStateAction<boolean>>;
+  currSongIndex: number;
+}
+
+export const SongContext = createContext<SongContextInterface>(
+  {} as SongContextInterface
+);
+
 function App() {
   const initialSongList = useRef<SongInterface[]>([]);
   const [songList, setSongList] = useState<SongInterface[]>([]);
 
   const [currSong, setCurrSong] = useState<SongInterface>({} as SongInterface);
-  const currSongIndex = useRef(0);
+  const currSongIndex = useRef<number>(0);
 
   const [isLoading, setIsLoading] = useState(true);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -73,27 +93,27 @@ function App() {
     handleSearch(searchTerm);
   }, [searchTerm]);
 
+  const value: SongContextInterface = {
+    changeSongIndex,
+    song: currSong,
+    isPlaying,
+    setIsPlaying,
+    currSongIndex: currSongIndex.current,
+  };
+
   return (
     <div className="App">
       <div className="container">
-        <FilterGroup
-          searchTerm={searchTerm}
-          setSearchTerm={setSearchTerm}
-          setMusicCategory={setMusicCategory}
-          categoryTitle={musicCategory.title}
-        />
-        <SongList
-          songList={songList}
-          changeSongIndex={changeSongIndex}
-          isLoading={isLoading}
-        />
-        <Player
-          song={currSong}
-          changeSongIndex={changeSongIndex}
-          currSongIndex={currSongIndex.current}
-          isPlaying={isPlaying}
-          setIsPlaying={setIsPlaying}
-        />
+        <SongContext.Provider value={value}>
+          <FilterGroup
+            searchTerm={searchTerm}
+            setSearchTerm={setSearchTerm}
+            setMusicCategory={setMusicCategory}
+            categoryTitle={musicCategory.title}
+          />
+          <SongList songList={songList} isLoading={isLoading} />
+          <Player />
+        </SongContext.Provider>
       </div>
     </div>
   );

@@ -5,28 +5,18 @@ import "./style.css";
 
 interface SongListProps {
   songList: SongInterface[];
-  changeSongIndex(newSongIndex: number): void;
   isLoading: boolean;
 }
 
-const SongList: React.FC<SongListProps> = ({
-  songList,
-  changeSongIndex,
-  isLoading,
-}) => {
+const SongList: React.FC<SongListProps> = ({ songList, isLoading }) => {
   return (
     <div className="song-list">
       {isLoading
-        ? Array.from(Array(100)).map((item, index) => (
+        ? Array.from(Array(50)).map((item, index) => (
             <Skeleton animation="wave" key={index} />
           ))
         : songList?.map((song, index) => (
-            <Song
-              song={song}
-              index={index}
-              key={song.music}
-              changeSongIndex={changeSongIndex}
-            />
+            <Song song={song} index={index} key={song.music} />
           ))}
     </div>
   );

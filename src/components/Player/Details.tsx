@@ -1,11 +1,8 @@
-import React from "react";
-import { SongInterface } from "../SongList/Song";
-interface DetailsProps {
-  song: SongInterface;
-  isPlaying: boolean;
-}
+import React, { useContext } from "react";
+import { SongContext } from "../../App";
 
-const Details: React.FC<DetailsProps> = ({ song, isPlaying }) => {
+const Details: React.FC = () => {
+  const { song, isPlaying } = useContext(SongContext);
   return (
     <div className="detail">
       <img

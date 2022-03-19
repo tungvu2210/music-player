@@ -1,20 +1,18 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import PlayCircleOutlineIcon from "@mui/icons-material/PlayCircleOutline";
 import PauseCircleOutlineIcon from "@mui/icons-material/PauseCircleOutline";
 import SkipNextIcon from "@mui/icons-material/SkipNext";
 import SkipPreviousIcon from "@mui/icons-material/SkipPrevious";
 import RepeatOneIcon from "@mui/icons-material/RepeatOne";
-import { PlayerInterface } from "./index";
+import { SongContext } from "../../App";
 
-const Control: React.FC<PlayerInterface> = ({
-  song,
-  currSongIndex,
-  changeSongIndex,
-  isPlaying,
-  setIsPlaying,
-}) => {
+const Control: React.FC = () => {
   const audio = useRef<HTMLAudioElement>(null!);
+
   const [isLooping, setIsLooping] = useState(false);
+
+  const { isPlaying, setIsPlaying, currSongIndex, changeSongIndex, song } =
+    useContext(SongContext);
 
   useEffect(() => {
     if (isPlaying) {

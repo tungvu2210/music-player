@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useContext } from "react";
 import LibraryMusicIcon from "@mui/icons-material/LibraryMusic";
+import { SongContext } from "../../App";
 
 export interface SongInterface {
   avatar: string;
@@ -15,12 +16,11 @@ export interface SongInterface {
 interface SongProps {
   song: SongInterface;
   index: number;
-  changeSongIndex(newSongIndex: number): void;
 }
 
-const Song: React.FC<SongProps> = ({ song, index, changeSongIndex }) => {
+const Song: React.FC<SongProps> = ({ song, index }) => {
   const { avatar, creator, title } = song;
-
+  const { changeSongIndex } = useContext(SongContext);
   return (
     <div className="song" onClick={() => changeSongIndex(index)}>
       <span>{index < 9 ? `0${index + 1}` : index + 1}</span>
